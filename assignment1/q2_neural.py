@@ -40,17 +40,42 @@ def forward_backward_prop(X, labels, params, dimensions):
 
     # Note: compute cost based on `sum` not `mean`.
     ### YOUR CODE HERE: forward propagation
-    raise NotImplementedError
+    
+    l = np.dot(X,W1) + b1
+    h = sigmoid(l)
+    t = np.dot(h,W2) + b2
+    sm = softmax(t)
+    sm_log = np.log(sm)
+    cost = -np.sum(sm_log * labels)
+    assert cost.size == 1
     ### END YOUR CODE
 
     ### YOUR CODE HERE: backward propagation
-    raise NotImplementedError
+    
+    dt = sm - labels
+    gradb2 = np.sum(dt, axis = 0)
+    gradW2 = np.dot(h.T,dt)
+    gradh = np.dot(dt,W2.T)
+    
+    dl = gradh * sigmoid_grad(h)
+    
+    gradW1 = np.dot(X.T,dl)
+    gradb1 = np.sum(dl, axis = 0)
+
+    
     ### END YOUR CODE
+
+    assert h.shape == gradh.shape
+    assert b2.size == gradb2.size
+    assert W2.shape == gradW2.shape
+    assert W1.shape == gradW1.shape
+    assert b1.size == gradb1.size
 
     ### Stack gradients (do not modify)
     grad = np.concatenate((gradW1.flatten(), gradb1.flatten(),
         gradW2.flatten(), gradb2.flatten()))
 
+    assert grad.shape == params.shape
     return cost, grad
 
 
@@ -59,13 +84,13 @@ def sanity_check():
     Set up fake data and parameters for the neural network, and test using
     gradcheck.
     """
-    print "Running sanity check..."
+    print ("Running sanity check...")
 
     N = 20
-    dimensions = [10, 5, 10]
+    dimensions = [10, 5, 10]   ## input -- hidden -- output
     data = np.random.randn(N, dimensions[0])   # each row will be a datum
     labels = np.zeros((N, dimensions[2]))
-    for i in xrange(N):
+    for i in range(N):
         labels[i, random.randint(0,dimensions[2]-1)] = 1
 
     params = np.random.randn((dimensions[0] + 1) * dimensions[1] + (
@@ -82,9 +107,9 @@ def your_sanity_checks():
     This function will not be called by the autograder, nor will
     your additional tests be graded.
     """
-    print "Running your sanity checks..."
+    print ("Running your sanity checks...")
     ### YOUR CODE HERE
-    raise NotImplementedError
+    print ("HAVEN't IMPLeMeNtED TESTS")
     ### END YOUR CODE
 
 
