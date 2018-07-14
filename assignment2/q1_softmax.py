@@ -24,6 +24,17 @@ def softmax(x):
     """
 
     ### YOUR CODE HERE
+    out = tf.zeros(x.shape)
+
+    out = x
+    rows_max = tf.reduce_max(out,axis=1)
+    rows_max = tf.reshape(rows_max,[-1,1])
+    out = out - rows_max
+    out = tf.exp(out)
+    rows_sum = tf.reduce_sum(out,axis=1)
+    rows_sum = tf.reshape(rows_sum,[-1,1])
+    out = out/rows_sum
+
     ### END YOUR CODE
 
     return out
@@ -54,6 +65,10 @@ def cross_entropy_loss(y, yhat):
     """
 
     ### YOUR CODE HERE
+      
+    out = tf.log(yhat)
+    out = tf.multiply(tf.cast(y,tf.float32),out) 
+    out = -tf.reduce_sum(out)
     ### END YOUR CODE
 
     return out
@@ -76,7 +91,16 @@ def test_softmax_basic():
             test2 = sess.run(test2)
     test_all_close("Softmax test 2", test2, np.array([[0.73105858, 0.26894142]]))
 
-    print "Basic (non-exhaustive) softmax tests pass\n"
+    
+    test3 = softmax(tf.constant(np.array([[1001, 1002], [3, 4],[0.5,0.5]]), dtype=tf.float32))
+    with tf.Session() as sess:
+            test3 = sess.run(test3)
+    test_all_close("Softmax test 3", test3, np.array([[0.26894142, 0.73105858],
+                                                      [0.26894142, 0.73105858],
+                                                      [0.5,0.5]]))
+    
+    
+    print ("Basic (non-exhaustive) softmax tests pass\n")
 
 
 def test_cross_entropy_loss_basic():
@@ -93,7 +117,19 @@ def test_cross_entropy_loss_basic():
     expected = -3 * np.log(.5)
     test_all_close("Cross-entropy test 1", test1, expected)
 
-    print "Basic (non-exhaustive) cross-entropy tests pass"
+
+    y = np.array([[0, 1], [1, 0], [1, 0]])
+    yhat = np.array([[.7, .3], [.4, .6], [.2, .8]])
+
+    test2 = cross_entropy_loss(tf.constant(y, dtype=tf.int32), tf.constant(yhat, dtype=tf.float32))
+    with tf.Session() as sess:
+        test2 = sess.run(test2)
+    expected = - np.log(.3) - np.log(.4) - np.log(.2)
+    test_all_close("Cross-entropy test 2", test2, expected)
+
+
+
+    print ("Basic (non-exhaustive) cross-entropy tests pass")
 
 if __name__ == "__main__":
     test_softmax_basic()

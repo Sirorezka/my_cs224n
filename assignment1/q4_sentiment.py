@@ -66,7 +66,7 @@ def getRegularizationValues():
     """
     values = None   # Assign a list of floats in the block below
     ### YOUR CODE HERE
-    values = [100,500,1000,2000,3000,5000,6000,7000,8000,9000,10000]
+    values = [0.1,10,50,100,200,300,500,1000,2000,3000,5000,6000,7000,8000,9000,10000]
     ### END YOUR CODE
     return sorted(values)
 
