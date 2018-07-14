@@ -119,7 +119,7 @@ def negSamplingCostAndGradient(predicted, target, outputVectors, dataset,
     gradPred = np.zeros(outputVectors.shape[1])
     grad = np.zeros(outputVectors.shape)
     
-    ds = 1-sigmoid(aa) ##1/ sigmoid(aa) * sigmoid_grad(sigm)    ## (V,1)
+    ds = 1 - sigm   ## (V,1)
     ds[0] = -ds[0]
     gradPred = np.dot(ds, outputVectors[indices])    
     
@@ -227,7 +227,7 @@ def cbow(currentWord, C, contextWords, tokens, inputVectors, outputVectors,
 
 def word2vec_sgd_wrapper(word2vecModel, tokens, wordVectors, dataset, C,
                          word2vecCostAndGradient=softmaxCostAndGradient):
-    batchsize = 1
+    batchsize = 50
     cost = 0.0
     grad = np.zeros(wordVectors.shape)
     N = wordVectors.shape[0]

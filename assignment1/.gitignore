@@ -1,1 +1,4 @@
 __pycache__/*
+*.npy
+*.png
+q4_dev_pred.txt

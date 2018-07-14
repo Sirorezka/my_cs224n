@@ -36,8 +36,8 @@ def softmax(x):
         x = np.exp(x)
         
         aa = np.reshape(np.sum(x,axis=1),(x.shape[0],1))
-        x = (x.T/np.sum(x,axis=1)).T
-
+        x = x/aa
+        
         ### END YOUR CODE
     else:
         # Vector
